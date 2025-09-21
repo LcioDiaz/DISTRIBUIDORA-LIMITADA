@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1059034398749",
+    "project_id": "distribuidora-limitada",
+    "storage_bucket": "distribuidora-limitada.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1059034398749:android:524658cc8feb5e0599c6f4",
+        "android_client_info": {
+          "package_name": "com.distribuidora.distribuidoralimitada"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1059034398749-7r60ajdaoomdro28gh59afuto5i4m5qs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.distribuidora.distribuidoralimitada",
+            "certificate_hash": "3f68985a8d8507eb1582800d630ab6b911044296"
+          }
+        },
+        {
+          "client_id": "1059034398749-n1n6jcce484s85s3m1cre1amt0rmhvgg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDT-FzOcJwDS53oKxiAiCf1YtEcGQFIVJs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1059034398749-n1n6jcce484s85s3m1cre1amt0rmhvgg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
