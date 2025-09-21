@@ -1,0 +1,41 @@
+# ---------- Gradle / Build ----------
+.gradle/
+build/
+**/build/
+.cxx/
+.externalNativeBuild/
+
+# ---------- Android Studio / IntelliJ ----------
+/.idea/*
+!.idea/codeStyles
+!.idea/inspectionProfiles
+*.iml
+captures/
+*.hprof
+
+# ---------- Config locales ----------
+local.properties
+**/keystore.properties
+*.jks
+*.keystore
+.env
+.env.*
+
+# ---------- Firebase ----------
+# Por lo general SÍ se versiona app/google-services.json
+# Si prefieres NO subirlo, descomenta:
+# app/google-services.json
+
+# Nunca subir cuentas de servicio / claves privadas
+*.p8
+*.pem
+*.key
+*.crt
+*.der
+serviceAccount*.json
+**/credentials/*.json
+
+# ---------- SO / Varios ----------
+.DS_Store
+Thumbs.db
+*.log
