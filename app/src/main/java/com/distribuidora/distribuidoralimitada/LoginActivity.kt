@@ -2,124 +2,75 @@ package com.distribuidora.distribuidoralimitada
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import com.distribuidora.distribuidoralimitada.auth.AuthViewModel
 import com.distribuidora.distribuidoralimitada.databinding.ActivityLoginBinding
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
-import kotlinx.coroutines.launch
+import com.google.firebase.auth.FirebaseAuth
 
+/**
+ * Actividad inicial que actúa como un selector de roles.
+ * Desde aquí, el usuario elige si es cliente o transportista antes de proceder
+ * a la pantalla de autenticación real (AuthActivity).
+ */
 class LoginActivity : AppCompatActivity() {
 
+    // Objeto de binding para acceder a las vistas del layout.
     private lateinit var binding: ActivityLoginBinding
-    private val authViewModel: AuthViewModel by viewModels()
+    // Instancia de FirebaseAuth para verificar si ya hay una sesión activa.
+    private val auth = FirebaseAuth.getInstance()
 
-    private lateinit var googleClient: GoogleSignInClient
-
-    // Launcher para el flujo de Google
-    private val googleLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            val data = result.data
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                val account = task.getResult(ApiException::class.java)
-                val idToken = account.idToken
-                if (idToken.isNullOrEmpty()) {
-                    Toast.makeText(this, "No se recibió idToken de Google", Toast.LENGTH_LONG).show()
-                    return@registerForActivityResult
-                }
-                // Intercambia el idToken por credencial Firebase
-                authViewModel.loginWithGoogle(idToken)
-            } catch (e: ApiException) {
-                // Códigos comunes:
-                // 10 = DEVELOPER_ERROR (falta SHA-1/Google activado en Firebase)
-                // 7  = NETWORK_ERROR
-                // 12501 = canceled
-                val msg = when (e.statusCode) {
-                    10 -> "Error de configuración (código 10). Verifica SHA-1 en Firebase y que Google esté habilitado."
-                    7  -> "Error de red. Revisa tu conexión."
-                    12501 -> "Inicio con Google cancelado."
-                    else -> "Google Sign-In falló (${e.statusCode}). ${e.localizedMessage}"
-                }
-                Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+    /**
+     * El método onStart se ejecuta cada vez que la actividad se vuelve visible.
+     * Es el lugar ideal para verificar el estado de autenticación.
+     */
+    override fun onStart() {
+        super.onStart()
+        /*
+         * Bloque de verificación de sesión:
+         * Si ya hay un usuario logueado (auth.currentUser no es nulo), no tiene sentido
+         * mostrarle esta pantalla de selección de rol. Por lo tanto, lo redirigimos
+         * directamente a AuthActivity, que se encargará de la lógica de redirección
+         * final a la pantalla de Home correspondiente.
+         */
+        if (auth.currentUser != null) {
+            val intent = Intent(this, AuthActivity::class.java).apply {
+                // Las flags limpian el historial de actividades, evitando que el usuario
+                // pueda volver a esta pantalla con el botón de "atrás".
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
+            startActivity(intent)
+            finish() // Cierra LoginActivity.
         }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Configura el cliente de Google con tu web client id (client_type:3)
-        googleClient = GoogleSignIn.getClient(
-            this,
-            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build()
-        )
-
-        setupButtonClickListeners()
-        observeViewModel()
-    }
-
-    private fun setupButtonClickListeners() {
-        // Email/Password
-        binding.btnLogin.setOnClickListener {
-            val email = binding.etEmail.text.toString().trim()
-            val password = binding.etPassword.text.toString().trim()
-            if (email.isNotEmpty() && password.isNotEmpty()) {
-                authViewModel.login(email, password)
-            } else {
-                Toast.makeText(this, "Por favor, ingresa email y contraseña", Toast.LENGTH_SHORT).show()
-            }
+        // Listener para el botón "Soy Cliente".
+        binding.btnSoyCliente.setOnClickListener {
+            // Navega a la pantalla de autenticación pasando el rol "cliente".
+            navigateToAuth("cliente")
         }
 
-        // Google
-        binding.btnGoogle.setOnClickListener {
-            // Limpia sesión previa de Google para evitar cuentas “pegadas”
-            googleClient.signOut().addOnCompleteListener {
-                googleLauncher.launch(googleClient.signInIntent)
-            }
-        }
-
-        binding.tvGoToRegister.setOnClickListener {
-            startActivity(Intent(this, RegisterActivity::class.java))
+        // Listener para el botón "Soy Transportista".
+        binding.btnSoyTransportista.setOnClickListener {
+            // Navega a la pantalla de autenticación pasando el rol "transportista".
+            navigateToAuth("transportista")
         }
     }
 
-    private fun observeViewModel() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    authViewModel.user.collect { user ->
-                        if (user != null) {
-                            goHome()
-                        }
-                    }
-                }
-                launch {
-                    authViewModel.error.collect { errorMessage ->
-                        Toast.makeText(this@LoginActivity, errorMessage, Toast.LENGTH_LONG).show()
-                    }
-                }
-            }
-        }
-    }
-
-    private fun goHome() {
-        val intent = Intent(this, HomeActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+    /**
+     * Crea un Intent para ir a AuthActivity y le pasa el rol seleccionado.
+     * AuthActivity usará este rol para saber a qué pantalla de registro debe ir
+     * si el usuario pulsa el enlace "¿No tienes cuenta?".
+     *
+     * @param role El rol del usuario ("cliente" o "transportista").
+     */
+    private fun navigateToAuth(role: String) {
+        val intent = Intent(this, AuthActivity::class.java).apply {
+            putExtra("USER_ROLE", role)
         }
         startActivity(intent)
-        finish()
     }
 }

@@ -4,15 +4,14 @@ plugins {
     id("com.google.gms.google-services")
 }
 
-
 android {
     namespace = "com.distribuidora.distribuidoralimitada"
-    compileSdk = 36
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.distribuidora.distribuidoralimitada"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -42,9 +41,8 @@ android {
     }
 }
 
-// En tu archivo app/build.gradle.kts
-
 dependencies {
+    // AndroidX y Material Design (Usando el catálogo de versiones 'libs')
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -52,24 +50,34 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.recyclerview)
 
-    // Lifecycles (usando la versión estable 2.7.0)
+    // Lifecycles (Componentes de Arquitectura de Android)
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
 
-    // Coroutines
+    // Coroutines para operaciones asíncronas
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1")
 
-    // Firebase / Google (con BoM y KTX)
+    // --- Firebase y Google ---
+    // 1. Se importa el BoM (Bill of Materials) de Firebase.
+    // Esto gestionará las versiones de todas las librerías de Firebase por nosotros.
     implementation(enforcedPlatform("com.google.firebase:firebase-bom:34.2.0"))
-    implementation("com.google.firebase:firebase-auth")
-    implementation("com.google.firebase:firebase-analytics")
 
+    // 2. Se declaran las librerías de Firebase que necesitas SIN especificar la versión.
+    // Se usa el sufijo '-ktx' para las extensiones de Kotlin.
+    // PRUEBA TEMPORAL: quita luego
+    implementation("com.google.firebase:firebase-auth-ktx:23.0.0")
+    implementation("com.google.firebase:firebase-database-ktx:21.0.0")
+    implementation("com.google.firebase:firebase-analytics-ktx:22.0.2")
+
+
+    // 3. Dependencias de Google Play Services (estas sí necesitan su propia versión)
     implementation("com.google.android.gms:play-services-auth:21.2.0")
     implementation("com.google.android.gms:play-services-location:21.3.0")
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom:2.1.10"))
 
+    // Dependencias para Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
+

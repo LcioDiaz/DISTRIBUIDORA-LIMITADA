@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"> <!-- Encabezado -->
+    android:padding="16dp">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -12,40 +13,33 @@
 
         <TextView
             android:id="@+id/tvHeader"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Distribudora.Limitada"
+            android:layout_weight="1"
+            android:text="Distribuidora Limitada"
             android:textSize="20sp"
             android:textStyle="bold" />
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
 
         <Button
             android:id="@+id/btnLogout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cerrar sesión" />
-    </LinearLayout> <!-- Lista de productos --> <TextView
+    </LinearLayout>
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Selecciona productos" />
+        android:text="Selecciona tus productos" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvProducts"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="4dp"
-        android:layout_weight="1" /> <!-- Temperatura cadena de frío -->
-    <EditText
-        android:id="@+id/etFreezerTemp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Temp. congelador (°C), ej: -20"
-        android:inputType="numberDecimal|numberSigned" /> <!-- Distancia / despacho -->
+        android:layout_weight="1" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -56,7 +50,7 @@
             android:id="@+id/btnCalcDistance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Calcular distancia a bodega" />
+            android:text="Calcular envío" />
 
         <Space
             android:layout_width="12dp"
@@ -67,7 +61,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Distancia: -" />
-    </LinearLayout> <!-- Totales --> <TextView
+    </LinearLayout>
+
+    <TextView
         android:id="@+id/tvSubtotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
