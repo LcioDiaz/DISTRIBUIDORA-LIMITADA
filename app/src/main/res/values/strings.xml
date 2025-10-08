@@ -1,3 +1,23 @@
 <resources>
     <string name="default_web_client_id" translatable="false">1059034398749-n1n6jcce484s85s3m1cre1amt0rmhvgg.apps.googleusercontent.com</string>
+    <string name="control_temp_titulo">Monitor de cadena de frío</string>
+    <string name="control_temp_temperatura_f">Temperatura (°F)</string>
+    <string name="control_temp_temperatura_c">Temperatura (°C)</string>
+    <string name="control_temp_estado">Estado actual</string>
+    <string name="control_temp_en_rango">En rango</string>
+    <string name="control_temp_fuera_de_rango">¡Fuera de rango!</string>
+    <string name="control_temp_sin_datos">Sin datos</string>
+    <string name="control_temp_error_estado">Error en la lectura</string>
+    <string name="control_temp_ultima_lectura">Última actualización</string>
+    <string name="control_temp_minimo">Mínimo permitido (°C)</string>
+    <string name="control_temp_maximo">Máximo permitido (°C)</string>
+    <string name="control_temp_guardar_rango">Guardar rangos</string>
+    <string name="control_temp_error_valores">Ingrese valores numéricos válidos</string>
+    <string name="control_temp_error_rango">El mínimo debe ser menor que el máximo</string>
+    <string name="control_temp_rango_actualizado">Rango actualizado</string>
+    <string name="control_temp_alerta_base">Alerta: la temperatura está fuera del rango permitido.</string>
+    <string name="control_temp_alerta_valor">Lectura actual: %1$s °C</string>
+    <string name="control_temp_alerta_rango">Rango configurado: %1$s °C - %2$s °C</string>
+    <string name="control_temp_instrucciones">Los valores de temperatura provienen de Firebase (campo "temperatura" en °F). Puedes personalizar el rango de seguridad y se almacenará localmente.</string>
+    <string name="control_temp_error_audio">No fue posible reproducir la alarma de audio.</string>
 </resources>

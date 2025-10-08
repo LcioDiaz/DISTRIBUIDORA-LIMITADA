@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.recyclerview)
+    implementation("androidx.cardview:cardview:1.0.0")
 
     // Lifecycles (Componentes de Arquitectura de Android)
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
@@ -75,9 +76,9 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:21.2.0")
     implementation("com.google.android.gms:play-services-location:21.3.0")
 
+
     // Dependencias para Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
-

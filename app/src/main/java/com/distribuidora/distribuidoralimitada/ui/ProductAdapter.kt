@@ -20,7 +20,6 @@ class ProductAdapter(
     private val qty: MutableList<Int>,
     private val onChange: () -> Unit
 ) : RecyclerView.Adapter<ProductAdapter.VH>() {
-
     // El ViewHolder contiene una instancia del Binding para el layout del item.
     inner class VH(val binding: ItemProductBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -33,16 +32,12 @@ class ProductAdapter(
         )
         return VH(binding)
     }
-
     // Devuelve el número total de items en la lista.
     override fun getItemCount() = items.size
+     // Vincula los datos de un producto en una posición específica con las vistas del ViewHolder.
 
-    /**
-     * Vincula los datos de un producto en una posición específica con las vistas del ViewHolder.
-     */
     override fun onBindViewHolder(h: VH, pos: Int) {
         val p = items[pos] // Obtiene el producto en la posición actual.
-
         // Accede a las vistas a través del objeto 'binding' de forma segura.
         h.binding.tvName.text = p.name
         h.binding.tvPrice.text = "$${p.price}"
@@ -56,7 +51,6 @@ class ProductAdapter(
             h.binding.tvQty.text = qty[pos].toString()
             onChange() // Notifica el cambio para actualizar los totales.
         }
-
         // Listener para el botón de restar (-).
         h.binding.btnMinus.setOnClickListener {
             if (qty[pos] > 0) {

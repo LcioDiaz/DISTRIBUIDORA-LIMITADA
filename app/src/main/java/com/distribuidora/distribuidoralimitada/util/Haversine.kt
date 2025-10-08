@@ -22,7 +22,6 @@ object Haversine {
         val c = 2 * asin(sqrt(a))
         return R_KM * c
     }
-
     private fun Double.toRad() = this * PI / 180.0
 }
 
